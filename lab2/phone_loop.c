@@ -10,7 +10,7 @@ int main(void) {
 	char phone_loop[11];
 	int integer;
 	int error_flag = 0;
-	scanf("%s", phone_loop);
+	scanf("%10s", phone_loop);
 	while (scanf("%d", &integer) != EOF) {
 		if (integer == -1) {
 			printf("%s\n", phone_loop);

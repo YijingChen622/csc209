@@ -9,12 +9,12 @@
 int main(void) {
 	char phone[11];
 	int integer;
-	scanf("%s", phone);
+	scanf("%10s", phone);
 	scanf("%d", &integer);
 	if (integer == -1) {
 		printf("%s", phone);
 		return 0;
-	} else if (integer >= 0 & integer <= 9) {
+	} else if (integer >= 0 && integer <= 9) {
 		printf("%c", phone[integer]);
 		return 0;
 	} else {
