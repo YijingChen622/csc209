@@ -6,20 +6,22 @@
  * $ ./phone_loop
  */
 
-int main() {
+int main(void) {
 	char phone_loop[11];
 	int integer;
-	scanf("%s%d", phone_loop, &integer);
-	while (1) {
+	int error_flag = 0;
+	scanf("%s", phone_loop);
+	while (scanf("%d", &integer) != EOF) {
 		if (integer == -1) {
 			printf("%s\n", phone_loop);
-			return 0;
+			error_flag = 0;
 		} else if (integer >= 0 && integer <= 9) {
 			printf("%c\n", phone_loop[integer]);
-			return 0;
+			error_flag = 0;
 		} else {
 			printf("ERROR\n");
-			return 1;
+			error_flag = 1;
 		}
 	}
+	return error_flag;
 }

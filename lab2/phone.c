@@ -6,10 +6,11 @@
  * $ ./phone
  */
 
-int main() {
+int main(void) {
 	char phone[11];
 	int integer;
-	scanf("%s%d\n", phone, &integer);
+	scanf("%s", phone);
+	scanf("%d", &integer);
 	if (integer == -1) {
 		printf("%s", phone);
 		return 0;
