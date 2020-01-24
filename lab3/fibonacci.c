@@ -15,6 +15,21 @@
  */
 
 /* Write your solution here */
+void fib(int **fib, int n){
+	*fib = malloc(sizeof(int) * n);
+	if (n == 1) {
+		(*fib)[0] = 0;
+	} else if (n == 2) {
+		(*fib)[0] = 0;
+		(*fib)[1] = 1;
+    } else {
+		(*fib)[0] = 0;
+		(*fib)[1] = 1;
+		for (int i = 2; i < n; i++) {
+			(*fib)[i] = (*fib)[i - 2] + (*fib)[i - 1];
+		}
+	}
+}
 
 
 int main(int argc, char **argv) {
