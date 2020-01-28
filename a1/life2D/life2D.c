@@ -19,8 +19,8 @@ int main(int argc, char **argv) {
     		count++;
     	}
     	for (int i = 0; i < states; i++) {
-    		update_state(board, height, width);
     		print_state(board, height, width);
+    		update_state(board, height, width);
     	}
     }
 }
