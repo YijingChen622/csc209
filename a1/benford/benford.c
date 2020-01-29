@@ -24,22 +24,26 @@ int main(int argc, char **argv) {
     		int tally[BASE];
     		for (int i = 0; i < BASE; i++) {
     			tally[i] = 0;
-    			int j = 0;
-    			while (fscanf(file, "%d", &j) != EOF) {
-    				add_to_tally(j, position, tally);
-    			}
-    			printf("%ds: %d\n", tally[i], tally[i]);
-    		}	
+    		}
+    		int j = 0;
+    		while (fscanf(file, "%d", &j) != EOF) {
+    			add_to_tally(j, position, tally);
+    		}
+    		for (int i = 0; i < BASE; i++) {
+    			printf("%ds: %d\n", i, tally[i]);
+    		}
     	} else {
     		int tally[BASE];
     		int position = (int)strtol(argv[1], NULL, 10);
     		for (int i = 0; i < BASE; i++) {
     			tally[i] = 0;
-    			int j = 0;
-    			while (scanf("%d", &j) != EOF) {
-    				add_to_tally(j, position, tally);
-    			}
-    			printf("%ds: %d\n", tally[i], tally[i]);
+    		}
+    		int j = 0;
+    		while (scanf("%d", &j) != EOF) {
+    			add_to_tally(j, position, tally);
+    		}
+    		for (int i = 0; i < BASE; i++) {
+    			printf("%ds: %d\n", i, tally[i]);
     		}
     	}
     }

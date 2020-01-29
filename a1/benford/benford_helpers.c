@@ -14,10 +14,9 @@ int count_digits(int num) {
 }
 
 int get_ith_from_right(int num, int i) {
-	int length = count_digits(num);
 	int index = 0;
 	int remain = num;
-	while (index < length - i - 1) {
+	while (index < i) {
 		remain = remain / BASE;
 		index++;
 	}
@@ -26,7 +25,7 @@ int get_ith_from_right(int num, int i) {
 }
 
 int get_ith_from_left(int num, int i) {
-    return get_ith_from_right(num, count_digits(num) - i);
+    return get_ith_from_right(num, count_digits(num) - i - 1);
     return 0;
 }
 
