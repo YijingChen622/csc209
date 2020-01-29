@@ -20,30 +20,10 @@ void update_state(int *board, int num_rows, int num_cols) {
     for (int i = 1; i < num_rows - 1; i++) {
     	for (int j = 1; j < num_cols - 1; j++) {
     		int count = 0;
-    		if (copy_arr[(i - 1) * num_cols + j - 1] == 1) {
-    			count++;
-    		}
-    		if (copy_arr[(i - 1) * num_cols + j] == 1){
-    			count++;
-    		} 
-    		if (copy_arr[(i - 1) * num_cols + j + 1] == 1) {
-    			count++;
-    		} 
-    		if (copy_arr[i * num_cols + j - 1] == 1) {
-    			count++;
-    		}
-    		if (copy_arr[i * num_cols + j + 1] == 1) {
-    			count++;
-    		}
-    		if (copy_arr[(i + 1) * num_cols + j - 1] == 1){
-    			count++;
-    		}
-    		if (copy_arr[(i + 1) * num_cols + j] == 1){
-    			count++;
-    		}
-    		if (copy_arr[(i + 1) * num_cols + j + 1] == 1){
-    			count++;
-    		}
+    		count = copy_arr[(i - 1) * num_cols + j - 1] + copy_arr[(i - 1) * num_cols + j] \
+    		+ copy_arr[(i - 1) * num_cols + j + 1] + copy_arr[i * num_cols + j - 1] + \
+    		copy_arr[i * num_cols + j + 1] + copy_arr[(i + 1) * num_cols + j - 1] + \
+    		copy_arr[(i + 1) * num_cols + j] + copy_arr[(i + 1) * num_cols + j + 1];
     		if ((copy_arr[i * num_cols + j] == 1) && (count < 2 || count >3)) {
     			board[i * num_cols + j] = 0;
     		}
@@ -52,6 +32,5 @@ void update_state(int *board, int num_rows, int num_cols) {
     		}
     	}
     }  
-    return;
 }
 

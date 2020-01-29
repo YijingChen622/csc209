@@ -22,5 +22,6 @@ int main(int argc, char **argv) {
     		print_state(board, height, width);
     		update_state(board, height, width);
     	}
+    	return 0;
     }
 }
