@@ -10,7 +10,6 @@ int count_digits(int num) {
     	result++;
     }
     return result;
-    return 0;
 }
 
 int get_ith_from_right(int num, int i) {
@@ -21,16 +20,13 @@ int get_ith_from_right(int num, int i) {
 		index++;
 	}
 	return remain % BASE;
-    return 0;
 }
 
 int get_ith_from_left(int num, int i) {
     return get_ith_from_right(num, count_digits(num) - i - 1);
-    return 0;
 }
 
 void add_to_tally(int num, int i, int *tally) {
     int digit = get_ith_from_left(num, i);
 	tally[digit] = tally[digit] + 1;
-    return;
 }
