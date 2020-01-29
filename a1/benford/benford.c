@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "benford position [datafile]\n");
         return 1;
     } else {
-    	int position = (int)strtol(argv[1], NULL, 10);
+    	int position = strtol(argv[1], NULL, 10);
     	int tally[BASE] = {0};
     	int num = 0;
     	if (argc == 3) {
