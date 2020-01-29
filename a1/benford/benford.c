@@ -32,6 +32,9 @@ int main(int argc, char **argv) {
     		for (int i = 0; i < BASE; i++) {
     			printf("%ds: %d\n", i, tally[i]);
     		}
+    		if (fclose(file) != 0) {
+    			return 1;
+    		}
     	} else {
     		int tally[BASE];
     		int position = (int)strtol(argv[1], NULL, 10);
