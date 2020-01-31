@@ -39,15 +39,14 @@ int main(int argc, char **argv) {
 
     // Your code goes here
 
-    int l1 = strlen(argv[1]);
-    int l2 = strlen(name);
-    char whole[l1 + l2 + 2];
-    strcpy(whole, argv[1]);
-    strcat(whole, " ");
-    strcat(whole, name);
-    whole[l1 + l2 + 1] = '\0';
-    strncpy(greeting, whole, 20);
+    char *total = (char*)malloc(sizeof(char) * (strlen(argv[1]) + strlen(argv[2]) + 2));
+    strcpy(total, argv[1]);
+    strcat(total, " ");
+    strcat(total, name);
+    strncpy(greeting, total, 20);
     greeting[19] = '\0';
+    free(total);
+
 
     printf("%s\n", greeting);
     return 0;
