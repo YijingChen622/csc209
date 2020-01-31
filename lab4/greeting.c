@@ -39,6 +39,26 @@ int main(int argc, char **argv) {
 
     // Your code goes here
 
+    // int len_greeting = strlen(argv[1]);
+    // char space[2] = " ";
+    // strncpy(greeting, argv[1], 19);
+    // greeting[19] = '\0';
+    // if (len_greeting <= 17) {
+    //     strcat(greeting, space);
+    //     strcat(greeting, name);
+    //     greeting[19] = '\0';
+    // } else if (len_greeting == 18) {
+    //     strcat(greeting, space);
+    //     greeting[19] = '\0';
+    // }
+    int l1 = strlen(argv[1]);
+    int l2 = strlen(name);
+    char whole[l1 + l2 + 2];
+    strcpy(whole, argv[1]);
+    strcat(whole, " ");
+    strcat(whole, name);
+    strncpy(greeting, whole, 20);
+    greeting[19] = '\0';
 
     printf("%s\n", greeting);
     return 0;
