@@ -42,35 +42,35 @@ void read_bitmap_metadata(FILE *image, int *pixel_array_offset, int *width, int 
  * 4. Return the address of the first `struct pixel *` you initialized.
  */
 struct pixel **read_pixel_array(FILE *image, int pixel_array_offset, int width, int height) {
+	// struct pixel **result = (struct pixel**)malloc(sizeof(struct pixel*) * height);
+	// fseek(image, pixel_array_offset, SEEK_SET);
+	// for (int i = 0; i < height; i++) {
+	// 	result[i] = (struct pixel*)malloc(sizeof(struct pixel) * width);
+	// 	fread(result[i], 3, width, image);
+	// }
+	// return &result[0];
 	struct pixel **result = (struct pixel**)malloc(sizeof(struct pixel*) * height);
-	fseek(image, pixel_array_offset, SEEK_SET);
-	for (int i = 0; i < height; i++) {
-		result[i] = (struct pixel*)malloc(sizeof(struct pixel) * width);
-		fread(result[i], 3, width, image);
-	}
-	return &result[0];
-	// struct pixel **pixels = (struct pixel**)malloc(sizeof(struct pixel*) * height);
-	// for (int i = 0; i < height; i++){
- //        pixels[i] = (struct pixel*)malloc(sizeof(struct pixel) * width);
- //    }
- //    fseek(image, pixel_array_offset, SEEK_SET);
- //    for (int i = 0; i < height; i++){
- //        for (int j = 0; j < width; j++){
- //            int error = fread(&(pixels[i][j].blue), 1, 1, image);
- //            if (error != 1){
- //                fprintf(stderr, "Error: Can't read pixel");
- //            }
- //            error = fread(&(pixels[i][j].green), 1, 1, image);
- //            if (error != 1){
- //                fprintf(stderr, "Error: Can't read pixel");
- //            }
- //            error = fread(&(pixels[i][j].red), 1, 1, image);
- //            if (error != 1){
- //                fprintf(stderr, "Error: Can't read pixel");
- //            }
- //        }
- //    }
- //    return pixels;
+	for (int i = 0; i < height; i++){
+        result[i] = (struct pixel*)malloc(sizeof(struct pixel) * width);
+    }
+    fseek(image, pixel_array_offset, SEEK_SET);
+    for (int i = 0; i < height; i++){
+        for (int j = 0; j < width; j++){
+            int error = fread(&(result[i][j].blue), 1, 1, image);
+            if (error != 1){
+                fprintf(stderr, "Error: Can't read pixel");
+            }
+            error = fread(&(result[i][j].green), 1, 1, image);
+            if (error != 1){
+                fprintf(stderr, "Error: Can't read pixel");
+            }
+            error = fread(&(result[i][j].red), 1, 1, image);
+            if (error != 1){
+                fprintf(stderr, "Error: Can't read pixel");
+            }
+        }
+    }
+    return result;
 }
 
 
