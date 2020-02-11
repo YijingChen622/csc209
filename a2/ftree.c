@@ -55,7 +55,6 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
     // For directories
     } else if (S_ISDIR(stat_buf.st_mode)) {
         DIR *d_ptr = opendir(true_path);
-        free(true_path);
         // Error check opendir
         if (d_ptr == NULL) {
             perror("opendir");
@@ -108,6 +107,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
     // What if fname is not one of them ('-', 'l', 'd'), should I return NULL or exit?
     // perror("invalid file");
     // exit(1);
+    free(true_path);
     return ftree;
 }
 
