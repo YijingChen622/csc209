@@ -21,7 +21,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
     char *true_path = malloc(sizeof(char) * true_len);
 
     strcpy(true_path, fname);
-    true_path[true_len] = '\0';
+    true_path[strlen(fname)] = '\0';
     strcat(true_path, path);
 
     struct stat stat_buf;
