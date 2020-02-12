@@ -32,6 +32,11 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
     }
     // Build a file tree
     struct TreeNode *ftree = malloc(sizeof(struct TreeNode));
+    // Check if there are enough space to store the ftree.
+    if (ftree == NULL) {
+        perror("malloc");
+        exit(1);
+    }
     // For regular files 
     if (S_ISREG(stat_buf.st_mode)) {
         if(name[0] != '.') {
@@ -87,6 +92,12 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
 
                 // Construct the node in the sub-directory
                 struct TreeNode *sub_node = malloc(sizeof(struct TreeNode));
+                // Check if there are enough space to store the sub_nade.
+                if (sub_node == NULL) {
+                    perror("malloc");
+                    exit(1);
+                }
+
                 sub_node = generate_ftree_helper(fname, sub_name, sub_path);
 
                 if (temp_ftree == NULL) {
