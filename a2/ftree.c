@@ -69,18 +69,20 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
             perror("opendir");
             exit(1);
         }
-        // Allocate a struct dirent pointer, which will be used to store information
-        // about a directory entry.
-        struct dirent *entry_ptr;
-        entry_ptr = readdir(d_ptr);
 
         ftree->fname = fname;
         int permissions = stat_buf.st_mode & 0777;
         ftree->permissions = permissions;
         ftree->type = 'd'; 
-        ftree->next = NULL;     
+        ftree->next = NULL;
+        ftree->contents = NULL;    
 
         struct TreeNode *temp_ftree = NULL;
+
+        // Allocate a struct dirent pointer, which will be used to store information
+        // about a directory entry.
+        struct dirent *entry_ptr;
+        entry_ptr = readdir(d_ptr);
 
         while (entry_ptr != NULL) {         
             char *sub_name = strdup(entry_ptr->d_name);
@@ -150,62 +152,28 @@ struct TreeNode *generate_ftree(const char *fname) {
  */
 void print_ftree(struct TreeNode *root) {
     
-    // // Here's a trick for remembering what depth (in the tree) you're at
-    // // and printing 2 * that many spaces at the beginning of the line.
-    // static int depth = 0;
-    // printf("%*s", depth * 2, "");
-    // // // Your implementation here.
-
-    // if (root->type == '-' || root->type == 'l') {
-    //     printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
-    // }
-    // if (root->type == 'd') {
-    //     printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
-    //     if (root->contents) {
-    //         depth++;
-    //         print_ftree(root->contents);
-    //         depth--;
-    //     }
-    // }
-    // if (root->next) {
-    //     print_ftree(root->next);
-    // }
-    // Print the ftree if it exists.
+    // Here's a trick for remembering what depth (in the tree) you're at
+    // and printing 2 * that many spaces at the beginning of the line.
+    static int depth = 0;
+    printf("%*s", depth * 2, "");
+    // // Your implementation here.
     if (root != NULL) {
-        // Remembering the depth of the entry.
-        static int depth = 0;
-
-        if ((root->type == 'l') | (root->type == '-')) {
-            // If the root is a link file or regular file
-            printf("%*s", depth * 2, "");
+        if (root->type == '-' || root->type == 'l') {
             printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
-
-            // Recursively print the next node of the current entry.
-            if (root->next != NULL) {
-                print_ftree(root -> next);
-            }   
+            if (root->next) {
+            print_ftree(root->next);
+            }
         } else if (root->type == 'd') {
-            // If the root is a directoy
-            printf("%*s", depth * 2, "");
             printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
-
-            // Recursively print the contents of the directory.
-            if (root->contents != NULL) {
-                // Save the depth of the directory.
-                int this_depth = depth;
-                // Increase the depth for the files in the directory.
-                depth ++;
-                // Print entries
+            if (root->contents) {
+                depth++;
                 print_ftree(root->contents);
-                // Return to the depth of the directory.
-                depth = this_depth;
-            } 
-            // Recursively print the next node of the current entry.
-            if (root->next != NULL) {
-                print_ftree(root->next);
+                depth--;
+            }
+            if (root->next) {
+            print_ftree(root->next);
             }
         }
-
     }
 }
 
@@ -217,6 +185,7 @@ void deallocate_ftree(struct TreeNode *node) {
    
     // Your implementation here.
     if (node != NULL) {
+        free(node->fname);
         if (node->type == 'd') {
             if (node->contents != NULL) {
                 deallocate_ftree(node->contents);
@@ -225,7 +194,6 @@ void deallocate_ftree(struct TreeNode *node) {
         if (node->next != NULL) {
             deallocate_ftree(node->next);
         }
-        free(node->fname);
         free(node);
     }
 }
