@@ -96,12 +96,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
                 strcat(sub_path, "/");
 
                 // Construct the node in the sub-directory
-                struct TreeNode *sub_node = malloc(sizeof(struct TreeNode));
-                // Check if there are enough space to store the sub_nade.
-                if (sub_node == NULL) {
-                    perror("malloc");
-                    exit(1);
-                }
+                struct TreeNode *sub_node = NULL;
 
                 sub_node = generate_ftree_helper(sub_name, sub_path);
 
