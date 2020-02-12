@@ -36,6 +36,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
     struct stat stat_buf;
     // Check if the file exist or not
     if (lstat(true_path, &stat_buf) == -1) {
+        free(ftree);
         fprintf(stderr, "The path (%s) does not point to an existing entry!\n", fname);
         return NULL;
     }
@@ -195,8 +196,6 @@ void deallocate_ftree(struct TreeNode *node) {
         if (node->next != NULL) {
             deallocate_ftree(node->next);
         }
-        free(node);
-    } else {
         free(node);
     }
 }
