@@ -16,20 +16,7 @@
  * of the FTree.  For files at other depths, the path would be the
  * file path from the root to that file.
  */
-struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *path) {
-    int true_len = strlen(fname) + strlen(path) + 1;
-    char true_path[true_len];
-    strcpy(true_path, fname);
-    true_path[strlen(fname)] = '\0';
-    strcat(true_path, path);
-
-
-    struct stat stat_buf;
-    // Check if the file exist or not
-    if (lstat(true_path, &stat_buf) == -1) {
-        fprintf(stderr, "The path (%s) does not point to an existing entry!\n", true_path);
-        return NULL;
-    }
+struct TreeNode *generate_ftree_helper(char *fname, char *path) {
     // Build a file tree
     struct TreeNode *ftree = malloc(sizeof(struct TreeNode));
     // Check if there are enough space to store the ftree.
@@ -37,10 +24,26 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
         perror("malloc");
         exit(1);
     }
+
+    // Get the path of the file
+    int true_len = strlen(fname) + strlen(path) + 1;
+    char true_path[true_len];
+    strcpy(true_path, path);
+    true_path[strlen(path)] = '\0';
+    strcat(true_path, fname);
+
+    // Fills in the struct stat stat_buf with information about the file
+    struct stat stat_buf;
+    // Check if the file exist or not
+    if (lstat(true_path, &stat_buf) == -1) {
+        fprintf(stderr, "The path (%s) does not point to an existing entry!\n", fname);
+        return NULL;
+    }
+
     // For regular files 
     if (S_ISREG(stat_buf.st_mode)) {
-        if(name[0] != '.') {
-            ftree->fname = name;
+        if(fname[0] != '.') {
+            ftree->fname = fname;
             int permissions = stat_buf.st_mode & 0777;
             ftree->permissions = permissions;
             ftree->type = '-';
@@ -49,8 +52,8 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
         }
     // For links
     } else if (S_ISLNK(stat_buf.st_mode)) {
-        if(name[0] != '.') {
-            ftree->fname = name;
+        if(fname[0] != '.') {
+            ftree->fname = fname;
             int permissions = stat_buf.st_mode & 0777;
             ftree->permissions = permissions;
             ftree->type = 'l';
@@ -59,6 +62,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
         }
     // For directories
     } else if (S_ISDIR(stat_buf.st_mode)) {
+        // Open the directory
         DIR *d_ptr = opendir(true_path);
         // Error check opendir
         if (d_ptr == NULL) {
@@ -70,7 +74,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
         struct dirent *entry_ptr;
         entry_ptr = readdir(d_ptr);
 
-        ftree->fname = name;
+        ftree->fname = fname;
         int permissions = stat_buf.st_mode & 0777;
         ftree->permissions = permissions;
         ftree->type = 'd'; 
@@ -83,12 +87,11 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
             if (sub_name[0] != '.'){
 
                 // Conctruct the path of this file, should be "<path>/<sub_name>" and null-terminated.
-                int len = strlen(path) + strlen(sub_name) + 2;
+                int len = strlen(true_path) + 2;
                 char sub_path[len];
-                strcpy(sub_path, path);
-                sub_path[strlen(path)] = '\0';
+                strcpy(sub_path, true_path);
+                sub_path[strlen(true_path)] = '\0';
                 strcat(sub_path, "/");
-                strcat(sub_path, sub_name);
 
                 // Construct the node in the sub-directory
                 struct TreeNode *sub_node = malloc(sizeof(struct TreeNode));
@@ -98,7 +101,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
                     exit(1);
                 }
 
-                sub_node = generate_ftree_helper(fname, sub_name, sub_path);
+                sub_node = generate_ftree_helper(sub_name, sub_path);
 
                 if (temp_ftree == NULL) {
                     ftree->contents = sub_node;
@@ -109,14 +112,14 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
             }
             entry_ptr = readdir(d_ptr);
         }
-        if (closedir(d_ptr) == -1) {
+        // Close the directory
+        int close = closedir(d_ptr);
+        // Error check opendir
+        if (close == -1) {
             perror("closedir");
             exit(1);
-        };
+        }
     }
-    // What if fname is not one of them ('-', 'l', 'd'), should I return NULL or exit?
-    // perror("invalid file");
-    // exit(1);
     return ftree;
 }
 
@@ -133,7 +136,7 @@ struct TreeNode *generate_ftree(const char *fname) {
     // Your implementation here.
     char *name = strdup(fname);
 
-    return generate_ftree_helper(fname, name, "");
+    return generate_ftree_helper(name, "");
 
 }
 
@@ -176,14 +179,16 @@ void print_ftree(struct TreeNode *root) {
 void deallocate_ftree(struct TreeNode *node) {
    
     // Your implementation here.
-    if (node->type == 'd') {
-        if (node->contents) {
-            deallocate_ftree(node->contents);
+    if (node) {
+        if (node->type == 'd') {
+            if (node->contents) {
+                deallocate_ftree(node->contents);
+            }
         }
+        if (node->next) {
+            deallocate_ftree(node->next);
+        }
+        free(node->fname);
+        free(node);
     }
-    if (node->next) {
-        deallocate_ftree(node->next);
-    }
-    free(node->fname);
-    free(node);
 }
