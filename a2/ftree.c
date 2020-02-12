@@ -150,25 +150,62 @@ struct TreeNode *generate_ftree(const char *fname) {
  */
 void print_ftree(struct TreeNode *root) {
     
-    // Here's a trick for remembering what depth (in the tree) you're at
-    // and printing 2 * that many spaces at the beginning of the line.
-    static int depth = 0;
-    printf("%*s", depth * 2, "");
-    // // Your implementation here.
+    // // Here's a trick for remembering what depth (in the tree) you're at
+    // // and printing 2 * that many spaces at the beginning of the line.
+    // static int depth = 0;
+    // printf("%*s", depth * 2, "");
+    // // // Your implementation here.
 
-    if (root->type == '-' || root->type == 'l') {
-        printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
-    }
-    if (root->type == 'd') {
-        printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
-        if (root->contents) {
-            depth++;
-            print_ftree(root->contents);
-            depth--;
+    // if (root->type == '-' || root->type == 'l') {
+    //     printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
+    // }
+    // if (root->type == 'd') {
+    //     printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
+    //     if (root->contents) {
+    //         depth++;
+    //         print_ftree(root->contents);
+    //         depth--;
+    //     }
+    // }
+    // if (root->next) {
+    //     print_ftree(root->next);
+    // }
+    // Print the ftree if it exists.
+    if (root != NULL) {
+        // Remembering the depth of the entry.
+        static int depth = 0;
+
+        if ((root->type == 'l') | (root->type == '-')) {
+            // If the root is a link file or regular file
+            printf("%*s", depth * 2, "");
+            printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
+
+            // Recursively print the next node of the current entry.
+            if (root->next != NULL) {
+                print_ftree(root -> next);
+            }   
+        } else if (root->type == 'd') {
+            // If the root is a directoy
+            printf("%*s", depth * 2, "");
+            printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
+
+            // Recursively print the contents of the directory.
+            if (root->contents != NULL) {
+                // Save the depth of the directory.
+                int this_depth = depth;
+                // Increase the depth for the files in the directory.
+                depth ++;
+                // Print entries
+                print_ftree(root->contents);
+                // Return to the depth of the directory.
+                depth = this_depth;
+            } 
+            // Recursively print the next node of the current entry.
+            if (root->next != NULL) {
+                print_ftree(root->next);
+            }
         }
-    }
-    if (root->next) {
-        print_ftree(root->next);
+
     }
 }
 
@@ -188,7 +225,7 @@ void deallocate_ftree(struct TreeNode *node) {
         if (node->next != NULL) {
             deallocate_ftree(node->next);
         }
-        // free(node->fname);
+        free(node->fname);
         free(node);
     }
 }
