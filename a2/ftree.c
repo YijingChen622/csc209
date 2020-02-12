@@ -18,11 +18,11 @@
  */
 struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *path) {
     int true_len = strlen(fname) + strlen(path) + 1;
-    char *true_path = malloc(sizeof(char) * true_len);
-
+    char true_path[true_len];
     strcpy(true_path, fname);
     true_path[strlen(fname)] = '\0';
     strcat(true_path, path);
+
 
     struct stat stat_buf;
     // Check if the file exist or not
@@ -79,7 +79,7 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
 
                 // Conctruct the path of this file, should be "<path>/<sub_name>" and null-terminated.
                 int len = strlen(path) + strlen(sub_name) + 2;
-                char *sub_path = malloc(sizeof(char) * len);
+                char sub_path[len];
                 strcpy(sub_path, path);
                 sub_path[strlen(path)] = '\0';
                 strcat(sub_path, "/");
@@ -88,7 +88,6 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
                 // Construct the node in the sub-directory
                 struct TreeNode *sub_node = malloc(sizeof(struct TreeNode));
                 sub_node = generate_ftree_helper(fname, sub_name, sub_path);
-                free(sub_path);
 
                 if (temp_ftree == NULL) {
                     ftree->contents = sub_node;
@@ -107,7 +106,6 @@ struct TreeNode *generate_ftree_helper(const char *fname, char * name, char *pat
     // What if fname is not one of them ('-', 'l', 'd'), should I return NULL or exit?
     // perror("invalid file");
     // exit(1);
-    free(true_path);
     return ftree;
 }
 
