@@ -133,7 +133,11 @@ struct TreeNode *generate_ftree(const char *fname) {
     // Your implementation here.
     char *name = strdup(fname);
 
-    return generate_ftree_helper(name, "");
+    struct TreeNode *ftree = generate_ftree_helper(name, "");
+
+    free(name);
+
+    return ftree;
 
 }
 
@@ -180,7 +184,6 @@ void deallocate_ftree(struct TreeNode *node) {
    
     // Your implementation here.
     if (node != NULL) {
-        // free(node->fname);
         if (node->type == 'd') {
             if (node->contents != NULL) {
                 deallocate_ftree(node->contents);
