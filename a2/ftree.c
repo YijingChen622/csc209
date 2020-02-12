@@ -85,7 +85,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
         entry_ptr = readdir(d_ptr);
 
         while (entry_ptr != NULL) {         
-            char *sub_name = strdup(entry_ptr->d_name);
+            char *sub_name = entry_ptr->d_name;
             if (sub_name[0] != '.'){
 
                 // Conctruct the path of this file, should be "<path>/<sub_name>" and null-terminated.
@@ -180,7 +180,7 @@ void deallocate_ftree(struct TreeNode *node) {
    
     // Your implementation here.
     if (node != NULL) {
-        free(node->fname);
+        // free(node->fname);
         if (node->type == 'd') {
             if (node->contents != NULL) {
                 deallocate_ftree(node->contents);
