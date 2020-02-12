@@ -158,18 +158,22 @@ void print_ftree(struct TreeNode *root) {
     // and printing 2 * that many spaces at the beginning of the line.
     static int depth = 0;
     printf("%*s", depth * 2, "");
-    // // Your implementation here.
+    // Your implementation here.
     if (root != NULL) {
+        // For regular files and links.
         if (root->type == '-' || root->type == 'l') {
             printf("%s (%c%o)\n", root->fname, root->type, root->permissions);
             if (root->next) {
             print_ftree(root->next);
             }
+        // For directories
         } else if (root->type == 'd') {
             printf("===== %s (%c%o) =====\n", root->fname, root->type, root->permissions);
             if (root->contents) {
+                // Before printing the contents we incrase the indent.
                 depth++;
                 print_ftree(root->contents);
+                // After printing the contents we decrease the indent.
                 depth--;
             }
             if (root->next) {
@@ -188,14 +192,17 @@ void deallocate_ftree(struct TreeNode *node) {
     // Your implementation here.
     if (node != NULL) {
         free(node->fname);
+        // Check if this node is a directory so that we need to free the contents.
         if (node->type == 'd') {
             if (node->contents != NULL) {
                 deallocate_ftree(node->contents);
             }
         }
+        // Always check node->next.
         if (node->next != NULL) {
             deallocate_ftree(node->next);
         }
+        // free the node in the end.
         free(node);
     }
 }
