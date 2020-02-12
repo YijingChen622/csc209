@@ -37,7 +37,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
     // Check if the file exist or not
     if (lstat(true_path, &stat_buf) == -1) {
         fprintf(stderr, "The path (%s) does not point to an existing entry!\n", fname);
-        return NULL;
+        exit(1);
     }
 
     // For regular files 
