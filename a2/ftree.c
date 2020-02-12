@@ -85,8 +85,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
         entry_ptr = readdir(d_ptr);
 
         while (entry_ptr != NULL) {         
-            char *sub_name = entry_ptr->d_name;
-            if (sub_name[0] != '.'){
+            if (entry_ptr->d_name[0] != '.'){
 
                 // Conctruct the path of this file, should be "<path>/<sub_name>" and null-terminated.
                 int len = strlen(true_path) + 2;
@@ -94,6 +93,7 @@ struct TreeNode *generate_ftree_helper(char *fname, char *path) {
                 strcpy(sub_path, true_path);
                 sub_path[strlen(true_path)] = '\0';
                 strcat(sub_path, "/");
+                char *sub_name = strdup(entry_ptr->d_name);
 
                 // Construct the node in the sub-directory
                 struct TreeNode *sub_node = NULL;
@@ -133,11 +133,7 @@ struct TreeNode *generate_ftree(const char *fname) {
     // Your implementation here.
     char *name = strdup(fname);
 
-    struct TreeNode *ftree = generate_ftree_helper(name, "");
-
-    free(name);
-
-    return ftree;
+    return generate_ftree_helper(name, "");
 
 }
 
@@ -184,6 +180,7 @@ void deallocate_ftree(struct TreeNode *node) {
    
     // Your implementation here.
     if (node != NULL) {
+        free(node->fname);
         if (node->type == 'd') {
             if (node->contents != NULL) {
                 deallocate_ftree(node->contents);
