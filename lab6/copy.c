@@ -12,8 +12,12 @@
  */
 
 char *copy(char *dest, const char *src, int capacity) {
-
-
+    memset(dest, '\0', capacity);
+    int count = 0;
+    while (src[count] != '\0' && count < capacity - 1) {
+        dest[count] = src[count];
+        count++;
+    }
     return dest;
 }
 
